@@ -11,14 +11,12 @@ public class Grid : MonoBehaviour {
     private float nodeRadius;
 
 	private Node [,] grid;
-    private Transform player;
     private float nodeDiameter;
     private int gridSizeX;
     private int gridSizeY;
 
     private void Awake ()
     {
-        player = GameObject.FindGameObjectWithTag ("Player").transform;
         nodeDiameter = nodeRadius * 2f;
         gridSizeX = Mathf.RoundToInt (gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt (gridWorldSize.y / nodeDiameter);
@@ -29,20 +27,22 @@ public class Grid : MonoBehaviour {
         CreateGrid ();
     }
 
+    public List<Node> path;
     private void OnDrawGizmos ()
     {
         Gizmos.DrawWireCube (transform.position, new Vector3 (gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)
         {
-            Node playerNode = NodeFromWorldPoint (player.position);
-
             foreach (Node n in grid)
             {
                 Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                if (playerNode == n)
+                if (path != null)
                 {
-                    Gizmos.color = Color.cyan;
+                    if (path.Contains (n))
+                    {
+                        Gizmos.color = Color.black;
+                    }
                 }
                 Gizmos.DrawCube (n.worldPosition, Vector3.one * nodeDiameter * 0.9f);
             }

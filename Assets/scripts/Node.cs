@@ -2,6 +2,7 @@
 
 public class Node {
 
+    public Node parent;
 	public bool walkable;
     public Vector3 worldPosition;
     public int gridX;
