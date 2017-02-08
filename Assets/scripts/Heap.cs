@@ -2,6 +2,12 @@
 
 public class Heap<T> where T : IHeapItem<T> {
 
+    public int Count {
+        get {
+            return currentItemsCount;
+        }
+    }
+
 	private T[] items;
     private int currentItemsCount;
 
@@ -28,12 +34,6 @@ public class Heap<T> where T : IHeapItem<T> {
         return firstItem;
     }
 
-    public int Count {
-        get {
-            return currentItemsCount;
-        }
-    }
-
     public void UpdateItem (T item)
     {
         SortUp (item);
@@ -58,6 +58,7 @@ public class Heap<T> where T : IHeapItem<T> {
             {
                 break;
             }
+            parentIndex = (item.HeapIndex - 1) / 2;
         }
     }
 

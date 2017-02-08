@@ -3,12 +3,20 @@ using System.Collections.Generic;
 
 public class Grid : MonoBehaviour {
 
+    public int MaxSize {
+        get {
+            return gridSizeX * gridSizeY;
+        }
+    }
+
     [SerializeField]
     private LayerMask unwalkableMask;
     [SerializeField]
     private Vector2 gridWorldSize;
     [SerializeField]
     private float nodeRadius;
+    [SerializeField]
+    private bool onlyDisplayPathGizmos;
 
 	private Node [,] grid;
     private float nodeDiameter;
@@ -32,21 +40,36 @@ public class Grid : MonoBehaviour {
     {
         Gizmos.DrawWireCube (transform.position, new Vector3 (gridWorldSize.x, 1, gridWorldSize.y));
 
-        if (grid != null)
+        if (onlyDisplayPathGizmos)
         {
-            foreach (Node n in grid)
+            if (path != null)
             {
-                Gizmos.color = (n.walkable) ? Color.white : Color.red;
-                if (path != null)
+                foreach (Node n in path)
                 {
-                    if (path.Contains (n))
-                    {
-                        Gizmos.color = Color.black;
-                    }
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawCube (n.worldPosition, Vector3.one * nodeDiameter * 0.9f);
                 }
-                Gizmos.DrawCube (n.worldPosition, Vector3.one * nodeDiameter * 0.9f);
             }
         }
+        else
+        {
+            if (grid != null)
+            {
+                foreach (Node n in grid)
+                {
+                    Gizmos.color = (n.walkable) ? Color.white : Color.red;
+                    if (path != null)
+                    {
+                        if (path.Contains (n))
+                        {
+                            Gizmos.color = Color.black;
+                        }
+                    }
+                    Gizmos.DrawCube (n.worldPosition, Vector3.one * nodeDiameter * 0.9f);
+                }
+            }
+        }
+
     }
 
     public Node NodeFromWorldPoint (Vector3 worldPosition)
