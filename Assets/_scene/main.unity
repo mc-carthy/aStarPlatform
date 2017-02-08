@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 172837874}
   - component: {fileID: 172837873}
   - component: {fileID: 172837872}
+  - component: {fileID: 172837876}
   m_Layer: 0
   m_Name: seeker
   m_TagString: Untagged
@@ -173,6 +174,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &172837876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 172837871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c3fa46032c4341b4976b6a7f96198bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!1 &299922618
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,8 +635,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 60
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -660,6 +673,7 @@ GameObject:
   - component: {fileID: 897372755}
   - component: {fileID: 897372754}
   - component: {fileID: 897372756}
+  - component: {fileID: 897372757}
   m_Layer: 0
   m_Name: a*
   m_TagString: Untagged
@@ -683,7 +697,7 @@ MonoBehaviour:
     m_Bits: 256
   gridWorldSize: {x: 100, y: 100}
   nodeRadius: 0.5
-  onlyDisplayPathGizmos: 1
+  displayGridGizmos: 0
 --- !u!4 &897372755
 Transform:
   m_ObjectHideFlags: 0
@@ -710,6 +724,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seeker: {fileID: 172837875}
   target: {fileID: 576714795}
+--- !u!114 &897372757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 897372753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06292fff2ef24ae88ac0085bedd2fbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &955778991
 GameObject:
   m_ObjectHideFlags: 0
