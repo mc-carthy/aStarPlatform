@@ -66,7 +66,7 @@ public class Pathfinding : MonoBehaviour {
                         continue;
                     }
 
-                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance (currentNode, neighbour);
+                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance (currentNode, neighbour) + neighbour.movementPenalty;
 
                     // If new path to neighbour is shorter or neighbour is not in openSet
                     if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains (neighbour))

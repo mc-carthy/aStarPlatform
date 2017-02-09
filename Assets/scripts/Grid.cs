@@ -9,6 +9,8 @@ public class Grid : MonoBehaviour {
         }
     }
 
+    public TerrainType[] walkableRegions;
+
     [SerializeField]
     private LayerMask unwalkableMask;
     [SerializeField]
@@ -19,6 +21,8 @@ public class Grid : MonoBehaviour {
     private bool displayGridGizmos;
 
 	private Node [,] grid;
+    private LayerMask walkableMask;
+    private Dictionary<int, int> walkableRegionsDictionary = new Dictionary<int, int> ();
     private float nodeDiameter;
     private int gridSizeX;
     private int gridSizeY;
@@ -28,6 +32,13 @@ public class Grid : MonoBehaviour {
         nodeDiameter = nodeRadius * 2f;
         gridSizeX = Mathf.RoundToInt (gridWorldSize.x / nodeDiameter);
         gridSizeY = Mathf.RoundToInt (gridWorldSize.y / nodeDiameter);
+
+        foreach (TerrainType region in walkableRegions)
+        {
+            walkableMask.value += region.terrainMask.value;
+            walkableRegionsDictionary.Add ((int) Mathf.Log (region.terrainMask.value, 2), region.terrainPenalty);
+        }
+
         CreateGrid ();
     }
 
@@ -102,9 +113,30 @@ public class Grid : MonoBehaviour {
                     Vector3.forward * (y * nodeDiameter + nodeRadius);
                 
                 bool walkable = !( Physics.CheckSphere (worldPoint, nodeRadius, unwalkableMask));
-                grid [x, y] = new Node (walkable, worldPoint, x, y);
+                int movementPenalty = 0;
+
+                if (walkable)
+                {
+                    Ray ray = new Ray (worldPoint + Vector3.up * 50, Vector3.down);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast (ray, out hit, 100, walkableMask))
+                    {
+                        walkableRegionsDictionary.TryGetValue (hit.collider.gameObject.layer, out movementPenalty);
+                    }
+                }
+
+                grid [x, y] = new Node (walkable, worldPoint, x, y, movementPenalty);
             }   
         }
+    }
+
+    [System.SerializableAttribute]
+    public class TerrainType {
+        
+        public LayerMask terrainMask;
+        public int terrainPenalty;
+
     }
 
 }
