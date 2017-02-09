@@ -41,6 +41,15 @@ public struct Line {
         approachSide = GetSide (pointPerpendicularToLine);
     }
 
+    public float DistanceFromPoint (Vector2 point)
+    {
+        float yInterceptPerpendicular = point.y - gradientPerpendicular * point.x;
+        float intersectX = (yInterceptPerpendicular - y_intercept) / (gradient - gradientPerpendicular);
+        float intersectY = gradient * intersectX + y_intercept;
+
+        return Vector2.Distance (point, new Vector2 (intersectX, intersectY));
+    }
+
     private bool GetSide (Vector2 point)
     {
         return (point.x - pointOnLine_1.x) * (pointOnLine_2.y - pointOnLine_1.y) > (point.y - pointOnLine_1.y) * (pointOnLine_2.x - pointOnLine_1.x);
