@@ -21,6 +21,7 @@ public class FieldOfView : MonoBehaviour {
     private Mesh viewMesh;
     private int edgeResolveIterations = 5;
     private float edgeDistThreshold = 0.5f;
+    private float maskCutawayDist = 1f;
 
     private void Start ()
     {
@@ -114,7 +115,7 @@ public class FieldOfView : MonoBehaviour {
 
         for (int i = 0; i < vertexCount - 1; i++)
         {
-            vertices [i + 1] = transform.InverseTransformPoint (viewPoints [i]);
+            vertices [i + 1] = transform.InverseTransformPoint (viewPoints [i] + transform.forward * maskCutawayDist);
             if (i < vertexCount - 2)
             {
                 triangles [i * 3] = 0;
