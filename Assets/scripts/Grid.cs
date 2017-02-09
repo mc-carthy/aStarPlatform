@@ -137,7 +137,7 @@ public class Grid : MonoBehaviour {
             }   
         }
 
-        BlurPenaltyMap (3);
+        BlurPenaltyMap (5);
 
     }
 
