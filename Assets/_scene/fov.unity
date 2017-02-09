@@ -1170,7 +1170,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 10
-  viewAngle: 0
+  viewAngle: 83
+  visibleTargets: []
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!54 &1598634040
 Rigidbody:
   m_ObjectHideFlags: 0
