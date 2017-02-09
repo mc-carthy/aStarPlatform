@@ -20,6 +20,7 @@ public class FieldOfView : MonoBehaviour {
     private MeshFilter viewMeshFilter;
     private Mesh viewMesh;
     private int edgeResolveIterations = 5;
+    private float edgeDistThreshold = 0.5f;
 
     private void Start ()
     {
@@ -87,7 +88,8 @@ public class FieldOfView : MonoBehaviour {
 
             if (i > 0)
             {
-                if (oldViewCast.hit != newViewCast.hit)
+                bool edgeDistThresholdExceeded = Mathf.Abs (oldViewCast.dist - newViewCast.dist) > edgeDistThreshold;
+                if ((oldViewCast.hit != newViewCast.hit) || (oldViewCast.hit && newViewCast.hit && edgeDistThresholdExceeded))
                 {
                     EdgeInfo edge = FindEdge (oldViewCast, newViewCast);
                     if (edge.pointA != Vector3.zero)
@@ -154,8 +156,8 @@ public class FieldOfView : MonoBehaviour {
         {
             float angle = (minAngle + maxAngle) / 2f;
             ViewCastInfo newViewCast = ViewCast (angle);
-            
-            if (newViewCast.hit == minViewCast.hit)
+            bool edgeDistThresholdExceeded = Mathf.Abs (minViewCast.dist - newViewCast.dist) > edgeDistThreshold;
+            if (newViewCast.hit == minViewCast.hit && !edgeDistThresholdExceeded)
             {
                 minAngle = angle;
                 minPoint = newViewCast.point;
