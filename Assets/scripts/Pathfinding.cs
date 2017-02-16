@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -11,20 +10,13 @@ public class Pathfinding : MonoBehaviour {
     public Transform target;
 
     private Grid grid;
-    private PathRequestManager requestManager;
 
     private void Awake ()
     {
         grid = GetComponent<Grid> ();
-        requestManager = GetComponent<PathRequestManager> ();
     }
 
-    public void StartFindPath (Vector3 startPos, Vector3 endPos)
-    {
-        StartCoroutine (FindPath (startPos, endPos));
-    }
-
-	private IEnumerator FindPath (Vector3 startPos, Vector3 endPos)
+	public void FindPath (PathRequest request, Action<PathResult> callback)
     {
         Stopwatch sw = new Stopwatch ();
         sw.Start ();
@@ -32,8 +24,8 @@ public class Pathfinding : MonoBehaviour {
         Vector3[] wayPoints = new Vector3[0];
         bool pathSuccess = false;
 
-        Node startNode = grid.NodeFromWorldPoint (startPos);
-        Node endNode = grid.NodeFromWorldPoint (endPos);
+        Node startNode = grid.NodeFromWorldPoint (request.pathStart);
+        Node endNode = grid.NodeFromWorldPoint (request.pathEnd);
 
         if (startNode.walkable && endNode.walkable)
         {
@@ -87,12 +79,12 @@ public class Pathfinding : MonoBehaviour {
                 }
             }
         }
-        yield return null;
         if (pathSuccess)
         {
             wayPoints = RetracePath (startNode, endNode);
+            pathSuccess = wayPoints.Length > 0;
         }
-        requestManager.FinishedProcessingPath (wayPoints, pathSuccess);
+        callback (new PathResult (wayPoints, pathSuccess, request.callback));
     }
 
     private Vector3[] RetracePath (Node startNode, Node endNode)
