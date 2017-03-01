@@ -21,7 +21,7 @@ public class FieldOfView : MonoBehaviour {
     private Mesh viewMesh;
     private int edgeResolveIterations = 5;
     private float edgeDistThreshold = 0.5f;
-    private float maskCutawayDist = 1f;
+    private float maskCutawayDist = 0.25f;
 
     private void Start ()
     {

@@ -4,7 +4,7 @@ public class TargetController : MonoBehaviour {
 
     private Rigidbody rb;
     private Camera viewCam;
-	private float speed = 20f;
+	private float speed = 10f;
     private Vector3 velocity;
 
     private void Awake ()
