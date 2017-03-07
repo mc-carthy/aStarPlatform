@@ -102,17 +102,31 @@ public class BspGridTree : MonoBehaviour {
                         int targetX = (int) leaf.parent.secondChild.centre.x;
                         int targetY = (int) leaf.parent.secondChild.centre.y;
 
-                        while (x != targetX)
+                        int dX = x < targetX ? 1 : -1;
+                        int dY = y < targetY? 1 : -1;
+
+                        if (x != targetX)
                         {
-                            grid [x, y] = 0;
-                            x += x < targetX ? 1 : -1;
+                            while (x >= 0 && x < treeSize.x)
+                            // while (x != targetX)
+                            {
+                                grid [x, y] = 0;
+                                // x += x < targetX ? 1 : -1;
+                                x += dX;
+                            }
                         }
 
-                        while (y != targetY)
+                        if (y != targetY)
                         {
-                            grid [x, y] = 0;
-                            y += y < targetY ? 1 : -1;
+                            while (y >= 0 && y < treeSize.y)
+                            // while (y != targetY)
+                            {
+                                grid [x, y] = 0;
+                                // y += y < targetY ? 1 : -1;
+                                y += dY;
+                            }
                         }
+
                     }
 
                 }
@@ -173,10 +187,10 @@ public class BspGridTree : MonoBehaviour {
                 }
             }
         }
-        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxX.room.centrePos, Color.red, 5f);
-        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxY.room.centrePos, Color.red, 5f);
-        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinX.room.centrePos, Color.red, 5f);
-        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinY.room.centrePos, Color.red, 5f);
+        // Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxX.room.centrePos, Color.red, 5f);
+        // Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxY.room.centrePos, Color.red, 5f);
+        // Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinX.room.centrePos, Color.red, 5f);
+        // Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinY.room.centrePos, Color.red, 5f);
     }
 
     private void SetGrid ()

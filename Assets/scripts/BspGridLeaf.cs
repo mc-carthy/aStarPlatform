@@ -113,11 +113,16 @@ public class BspGridLeaf {
                 Random.Range (roomMinDimension, height - roomLeafBoundary)
             );
             roomPos = new Vector2 (
-                Random.Range (roomLeafBoundary, width - (int)roomSize.x - roomLeafBoundary), 
+                Random.Range (roomLeafBoundary, width - (int)roomSize.x - roomLeafBoundary),
                 Random.Range (roomLeafBoundary, height - (int)roomSize.y - roomLeafBoundary)
             );
             
-            room = new Room (roomSize, roomPos + new Vector2 (leftX, bottomY), this);
+            // Debug.Log ("Min x = " + (roomLeafBoundary).ToString ());
+            // Debug.Log (" - Max x = " + (width - (int)roomSize.x - roomLeafBoundary).ToString ());
+            // Debug.Log ("Min y = " + (roomLeafBoundary).ToString ());
+            // Debug.Log (" - Max y = " + (height - (int)roomSize.y - roomLeafBoundary).ToString ());
+
+            room = new Room (roomSize, roomPos + new Vector2 (leftX, bottomY), this);  
 
             hasRoom = true;
         }
