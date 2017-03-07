@@ -2,7 +2,7 @@
 
 public class BspGridLeaf {
 
-    private const int MIN_LEAF_SIZE = 8;
+    private const int MIN_LEAF_SIZE = 12;
 
     public BspGridLeaf parent;
     public BspGridLeaf firstChild;
@@ -12,7 +12,8 @@ public class BspGridLeaf {
     public int height;
     public int leftX;
     public int bottomY;
-    public int roomLeafBoundary = 3;
+    public int roomMinDimension = 4;
+    public int roomLeafBoundary = 4;
     public bool hasRoom;
     public Vector2 roomSize;
     public Vector2 roomPos;
@@ -40,6 +41,12 @@ public class BspGridLeaf {
     {
         // If this leaf already has children, skip it
         if (firstChild != null || secondChild != null)
+        {
+            return false;
+        }
+
+        // Small chance of leaf not splitting leading to a large room
+        if (Random.Range (0f, 1f) < 0.2f && parent != null)
         {
             return false;
         }
@@ -102,8 +109,8 @@ public class BspGridLeaf {
         else
         {
             roomSize = new Vector2 (
-                Random.Range (roomLeafBoundary, width - roomLeafBoundary), 
-                Random.Range (roomLeafBoundary, height - roomLeafBoundary)
+                Random.Range (roomMinDimension, width - roomLeafBoundary), 
+                Random.Range (roomMinDimension, height - roomLeafBoundary)
             );
             roomPos = new Vector2 (
                 Random.Range (roomLeafBoundary, width - (int)roomSize.x - roomLeafBoundary), 
@@ -119,9 +126,9 @@ public class BspGridLeaf {
     public class Room {
 
         public Vector2 size;
-        // public Vector2 centrePos;
         public BspGridLeaf parent;
         public Vector2 bottomLeft;
+        public Vector2 centrePos;
 
         public Room (Vector2 _size, Vector2 _bottomLeft, BspGridLeaf _parent)
         {
@@ -129,7 +136,7 @@ public class BspGridLeaf {
             bottomLeft = _bottomLeft;
             parent = _parent;
 
-
+            centrePos = bottomLeft + size / 2;
         }
     }
 

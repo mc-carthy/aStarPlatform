@@ -14,6 +14,7 @@ public class BspGridTree : MonoBehaviour {
     private void Start ()
     {
         CreateRooms ();
+        CreateCorridors ();
     }
 
     private void Update ()
@@ -57,6 +58,29 @@ public class BspGridTree : MonoBehaviour {
         SetGrid ();
     }
 
+    private void CreateCorridors ()
+    {
+        foreach (BspGridLeaf leaf in leaves)
+        {
+            if (leaf.parent != null)
+            {
+                if (leaf.parent.firstChild != null && leaf.parent.secondChild != null)
+                {
+                    if (leaf.parent.firstChild.hasRoom && leaf.parent.secondChild.hasRoom)
+                    {
+                        Debug.DrawLine (leaf.parent.firstChild.room.centrePos, leaf.parent.secondChild.room.centrePos, Color.red, 2f);
+                    }
+                    else
+                    {
+                        Debug.DrawLine (leaf.parent.firstChild.centre, leaf.parent.secondChild.centre, Color.green, 2f);
+                    }
+
+                }
+
+            }
+        }
+    }
+
     private void SetGrid ()
     {
         grid = new int [(int) treeSize.x, (int) treeSize.y];
@@ -80,8 +104,6 @@ public class BspGridTree : MonoBehaviour {
                         int gridX = x + (int) leaf.room.bottomLeft.x;
                         int gridY = y + (int) leaf.room.bottomLeft.y;
                         grid [gridX, gridY] = 0;
-                        Debug.Log ("x : " + leaf.room.bottomLeft.x + (leaf.room.size.x / 2));
-                        Debug.Log ("y : " + leaf.room.bottomLeft.y + (leaf.room.size.y / 2));
                     }
                 }
             }
