@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55baaedbf948d406389f765ed0c3a8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeSize: {x: 40, y: 40}
+  treeSize: {x: 60, y: 60}
 --- !u!1 &429511466
 GameObject:
   m_ObjectHideFlags: 0

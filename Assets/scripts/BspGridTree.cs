@@ -11,10 +11,17 @@ public class BspGridTree : MonoBehaviour {
     private List<BspGridLeaf> leaves = new List<BspGridLeaf> ();
 	public int[,] grid;
 
+        
+    private BspGridLeaf exitLeafMaxX;
+    private BspGridLeaf exitLeafMaxY;
+    private BspGridLeaf exitLeafMinX;
+    private BspGridLeaf exitLeafMinY;
+
     private void Start ()
     {
         CreateRooms ();
         CreateCorridors ();
+        BuildExit ();
     }
 
     private void Update ()
@@ -68,7 +75,7 @@ public class BspGridTree : MonoBehaviour {
                 {
                     if (leaf.parent.firstChild.hasRoom && leaf.parent.secondChild.hasRoom)
                     {
-                        Debug.DrawLine (leaf.parent.firstChild.room.centrePos, leaf.parent.secondChild.room.centrePos, Color.red, 2f);
+                        // Debug.DrawLine (leaf.parent.firstChild.room.centrePos, leaf.parent.secondChild.room.centrePos, Color.red, 2f);
                         int x = (int) leaf.parent.firstChild.room.centrePos.x;
                         int y = (int) leaf.parent.firstChild.room.centrePos.y;
                         int targetX = (int) leaf.parent.secondChild.room.centrePos.x;
@@ -89,7 +96,7 @@ public class BspGridTree : MonoBehaviour {
                     }
                     else
                     {
-                        Debug.DrawLine (leaf.parent.firstChild.centre, leaf.parent.secondChild.centre, Color.green, 2f);
+                        // Debug.DrawLine (leaf.parent.firstChild.centre, leaf.parent.secondChild.centre, Color.green, 2f);
                         int x = (int) leaf.parent.firstChild.centre.x;
                         int y = (int) leaf.parent.firstChild.centre.y;
                         int targetX = (int) leaf.parent.secondChild.centre.x;
@@ -112,6 +119,64 @@ public class BspGridTree : MonoBehaviour {
 
             }
         }
+    }
+
+    private void BuildExit ()
+    {
+
+        // Randomly choose an edge to exit at
+        // float ran = Random.Range (0f, 1f);
+        // if (ran <= 0.25f)
+        // {
+        // }
+        // else if (ran <= 0.5f)
+        // {
+        // }
+        // else if (ran <= 0.75f)
+        // {
+        // }
+        // else
+        // {
+        // }
+
+        foreach (BspGridLeaf leaf in leaves)
+        {
+            if (leaf.hasRoom)
+            {
+                exitLeafMaxX = leaf;
+                exitLeafMaxY = leaf;
+                exitLeafMinX = leaf;
+                exitLeafMinY = leaf;
+                break;
+            }
+        }
+
+        foreach (BspGridLeaf leaf in leaves)
+        {
+            if (leaf.hasRoom)
+            {
+                if (leaf.room.centrePos.x > exitLeafMaxX.room.centrePos.x)
+                {
+                    exitLeafMaxX = leaf;
+                }
+                if (leaf.room.centrePos.y > exitLeafMaxY.room.centrePos.y)
+                {
+                    exitLeafMaxY = leaf;
+                }
+                if (leaf.room.centrePos.x < exitLeafMinX.room.centrePos.x)
+                {
+                    exitLeafMinX = leaf;
+                }
+                if (leaf.room.centrePos.y < exitLeafMinY.room.centrePos.y)
+                {
+                    exitLeafMinY = leaf;
+                }
+            }
+        }
+        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxX.room.centrePos, Color.red, 5f);
+        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMaxY.room.centrePos, Color.red, 5f);
+        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinX.room.centrePos, Color.red, 5f);
+        Debug.DrawLine (new Vector2 (treeSize.x / 2f, treeSize.y / 2f), exitLeafMinY.room.centrePos, Color.red, 5f);
     }
 
     private void SetGrid ()
