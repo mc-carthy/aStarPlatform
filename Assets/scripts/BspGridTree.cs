@@ -19,9 +19,9 @@ public class BspGridTree : MonoBehaviour {
 
     private void Start ()
     {
-        CreateRooms ();
-        CreateCorridors ();
+        CreateRooms (treeSize);
         BuildExit ();
+        BuildWalls ();
     }
 
     private void Update ()
@@ -32,9 +32,9 @@ public class BspGridTree : MonoBehaviour {
         }
     }
 
-    private void CreateRooms ()
+    private void CreateRooms (Vector2 size)
     {
-        root = new BspGridLeaf (0, 0, (int) treeSize.x, (int) treeSize.y, null);
+        root = new BspGridLeaf (0, 0, (int) size.x, (int) size.y, null);
         leaves.Add (root);
 
         bool didSplit = true;
@@ -63,6 +63,7 @@ public class BspGridTree : MonoBehaviour {
         }
 
         SetGrid ();
+        CreateCorridors ();
     }
 
     private void CreateCorridors ()
@@ -222,16 +223,33 @@ public class BspGridTree : MonoBehaviour {
         }
     }
 
-    private void OnDrawGizmos ()
+    private void BuildWalls ()
     {
         for (int x = 0; x < treeSize.x; x++)
         {
             for (int y = 0; y < treeSize.y; y++)
             {
-                Gizmos.color = (grid [x, y] == 1) ? Color.black : Color.white;
-                Gizmos.DrawCube (new Vector3 (x, y, 0), Vector3.one * 0.75f);
+                if (grid [x, y] == 1)
+                {
+                    GameObject cube = GameObject.CreatePrimitive (PrimitiveType.Cube);
+                    cube.transform.position = new Vector2 (x, y);
+                    cube.transform.parent = transform;
+                    cube.GetComponent<Renderer> ().sharedMaterial.color = Color.black;
+                }
             }
         }
     }
+
+    // private void OnDrawGizmos ()
+    // {
+    //     for (int x = 0; x < treeSize.x; x++)
+    //     {
+    //         for (int y = 0; y < treeSize.y; y++)
+    //         {
+    //             Gizmos.color = (grid [x, y] == 1) ? Color.black : Color.white;
+    //             Gizmos.DrawCube (new Vector3 (x, y, 0), Vector3.one * 0.75f);
+    //         }
+    //     }
+    // }
 
 }
