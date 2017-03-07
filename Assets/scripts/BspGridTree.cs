@@ -69,10 +69,43 @@ public class BspGridTree : MonoBehaviour {
                     if (leaf.parent.firstChild.hasRoom && leaf.parent.secondChild.hasRoom)
                     {
                         Debug.DrawLine (leaf.parent.firstChild.room.centrePos, leaf.parent.secondChild.room.centrePos, Color.red, 2f);
+                        int x = (int) leaf.parent.firstChild.room.centrePos.x;
+                        int y = (int) leaf.parent.firstChild.room.centrePos.y;
+                        int targetX = (int) leaf.parent.secondChild.room.centrePos.x;
+                        int targetY = (int) leaf.parent.secondChild.room.centrePos.y;
+
+                        while (x != targetX)
+                        {
+                            grid [x, y] = 0;
+                            x += x < targetX ? 1 : -1;
+                        }
+
+                        while (y != targetY)
+                        {
+                            grid [x, y] = 0;
+                            y += y < targetY ? 1 : -1;
+                        }
+
                     }
                     else
                     {
                         Debug.DrawLine (leaf.parent.firstChild.centre, leaf.parent.secondChild.centre, Color.green, 2f);
+                        int x = (int) leaf.parent.firstChild.centre.x;
+                        int y = (int) leaf.parent.firstChild.centre.y;
+                        int targetX = (int) leaf.parent.secondChild.centre.x;
+                        int targetY = (int) leaf.parent.secondChild.centre.y;
+
+                        while (x != targetX)
+                        {
+                            grid [x, y] = 0;
+                            x += x < targetX ? 1 : -1;
+                        }
+
+                        while (y != targetY)
+                        {
+                            grid [x, y] = 0;
+                            y += y < targetY ? 1 : -1;
+                        }
                     }
 
                 }
