@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class BspGridTree : MonoBehaviour {
 
-    public Vector2 treeSize;
+    [SerializeField]
+    private Vector2 treeSize;
 
     private BspGridLeaf root;
     private List<BspGridLeaf> leaves = new List<BspGridLeaf> ();
-	private int[,] grid;
+	public int[,] grid;
 
     private void Start ()
     {
         CreateRooms ();
-        GameObject.Find ("debugQuads").gameObject.SetActive (false);
     }
 
     private void Update ()
@@ -36,27 +36,68 @@ public class BspGridTree : MonoBehaviour {
 
             for (int i = 0; i < leaves.Count; i++)
             {
-                // If we haven't already split this leaf
+                // If we haven't already split the leaf
                 if (leaves [i].firstChild == null && leaves [i].secondChild == null)
                 {
                     // Attempt to split it
                     if (leaves [i].Split ())
                     {
-                        // If successful, add it's children to the list of leaves
+                        // If we can split it, add its children to the leaves list
                         leaves.Add (leaves [i].firstChild);
                         leaves.Add (leaves [i].secondChild);
+                        
                         didSplit = true;
                     }
                 }
             }
+
+            root.CreateRooms ();
         }
 
-        root.CreateRooms ();
-        GameObject baseQuad = GameObject.CreatePrimitive (PrimitiveType.Quad);
-        baseQuad.transform.position = new Vector3 (treeSize.x / 2f, -2f, treeSize.y / 2f);
-        baseQuad.transform.localScale = new Vector3 (treeSize.x, treeSize.y, 0f);
-        baseQuad.transform.Rotate (new Vector3 (90f, 0f, 0f));
-        baseQuad.GetComponent<Renderer> ().material.color = Color.black;
+        SetGrid ();
+    }
+
+    private void SetGrid ()
+    {
+        grid = new int [(int) treeSize.x, (int) treeSize.y];
+
+        for (int x = 0; x < treeSize.x; x++)
+        {
+            for (int y = 0; y < treeSize.y; y++)
+            {
+                grid [x, y] = 1;
+            }
+        }
+
+        foreach (BspGridLeaf leaf in leaves)
+        {
+            if (leaf.hasRoom)
+            {
+                for (int x = 0; x < (int) leaf.room.size.x; x++)
+                {
+                    for (int y = 0; y < (int) leaf.room.size.y; y++)
+                    {
+                        int gridX = x + (int) leaf.room.bottomLeft.x;
+                        int gridY = y + (int) leaf.room.bottomLeft.y;
+                        grid [gridX, gridY] = 0;
+                        Debug.Log ("x : " + leaf.room.bottomLeft.x + (leaf.room.size.x / 2));
+                        Debug.Log ("y : " + leaf.room.bottomLeft.y + (leaf.room.size.y / 2));
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos ()
+    {
+        for (int x = 0; x < treeSize.x; x++)
+        {
+            for (int y = 0; y < treeSize.y; y++)
+            {
+                Gizmos.color = (grid [x, y] == 1) ? Color.black : Color.white;
+                Gizmos.DrawCube (new Vector3 (x, y, 0), Vector3.one * 0.75f);
+            }
+        }
     }
 
 }
