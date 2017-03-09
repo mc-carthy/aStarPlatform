@@ -338,7 +338,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 63293ef6016ae444694a6d986ac86154, type: 2}
+  - {fileID: 2100000, guid: 61f1784c248d4468a9678a223c37160b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -608,16 +608,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6d5f27f4ead42298f4dc3e70c6219c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 
-  useRandomSeed: 1
+  seed: 0
+  useRandomSeed: 0
   width: 128
   height: 64
   borderSize: 5
-  randomFillPercent: 55
+  randomFillPercent: 45
   smoothingIterations: 5
-  wallThresholdSize: 20
+  wallThresholdSize: 50
   roomThresholdSize: 50
-  passageRadius: 2
+  passageRadius: 5
 --- !u!114 &1423558974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,7 +975,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 98b28b132d53f429cbab43016e43c6b3, type: 2}
+  - {fileID: 2100000, guid: 61f1784c248d4468a9678a223c37160b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

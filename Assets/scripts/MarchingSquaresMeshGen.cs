@@ -185,31 +185,31 @@ public class MarchingSquaresMeshGen : MonoBehaviour {
                 // Bottom right vertex
                 wallVertices.Add (vertices [outline [i + 1]] - Vector3.up * wallHeight);
 
-                // // Top Left
-                // wallTriangles.Add (startIndex + 0);
-                // // Bottom left
-                // wallTriangles.Add (startIndex + 2);
-                // // Bottom Right
-                // wallTriangles.Add (startIndex + 3);
-                // // Bottom Right
-                // wallTriangles.Add (startIndex + 3);
-                // // Top Right
-                // wallTriangles.Add (startIndex + 1);
-                // // Top Left
-                // wallTriangles.Add (startIndex + 0);
-
                 // Top Left
-                wallTriangles.Add (startIndex + 3);
+                wallTriangles.Add (startIndex + 0);
                 // Bottom left
                 wallTriangles.Add (startIndex + 2);
                 // Bottom Right
-                wallTriangles.Add (startIndex + 0);
+                wallTriangles.Add (startIndex + 3);
                 // Bottom Right
-                wallTriangles.Add (startIndex + 0);
+                wallTriangles.Add (startIndex + 3);
                 // Top Right
                 wallTriangles.Add (startIndex + 1);
                 // Top Left
-                wallTriangles.Add (startIndex + 3);
+                wallTriangles.Add (startIndex + 0);
+
+                // // Top Left
+                // wallTriangles.Add (startIndex + 3);
+                // // Bottom left
+                // wallTriangles.Add (startIndex + 2);
+                // // Bottom Right
+                // wallTriangles.Add (startIndex + 0);
+                // // Bottom Right
+                // wallTriangles.Add (startIndex + 0);
+                // // Top Right
+                // wallTriangles.Add (startIndex + 1);
+                // // Top Left
+                // wallTriangles.Add (startIndex + 3);
             }
         }
 
@@ -437,7 +437,7 @@ public class MarchingSquaresMeshGen : MonoBehaviour {
                 int newOutlineVertex = GetConnectedOutlineVertex (vertexIndex);
                 if (newOutlineVertex != -1)
                 {
-                    checkedVertices.Add (newOutlineVertex);
+                    checkedVertices.Add (vertexIndex);
 
                     List<int> newOutline = new List<int> ();
                     newOutline.Add (vertexIndex);
