@@ -146,6 +146,11 @@ public class MapGenerator : MonoBehaviour {
 			currentContourValue++;
 		}
 
+		if (GameObject.Find ("quadHolder") != null)
+		{
+			GameObject.Destroy (GameObject.Find ("quadHolder"));
+		}
+
 		GameObject quadHolder = new GameObject ();
 		quadHolder.name = "quadHolder";
 
