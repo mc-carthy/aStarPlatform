@@ -89,7 +89,7 @@ public class MeshGenerator : MonoBehaviour {
 		mesh.RecalculateNormals ();
 
 
-		// TODO
+		// Number of times this texture will tile across the mesh
 		int tileAmount = 10;
 		Vector2 [] uvs = new Vector2 [vertices.Count];
 		for (int i = 0; i < vertices.Count; i++)

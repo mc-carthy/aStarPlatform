@@ -19,6 +19,7 @@ public class MapGenerator : MonoBehaviour {
 	private int numSmoothingIterations;
 
 	private int [,] map;
+	private int [,] contourMap;
 	private int [,] borderedMap;
 	private int borderSize = 5;
 
@@ -29,7 +30,7 @@ public class MapGenerator : MonoBehaviour {
 
 	private void Update() 
 	{
-		if (Input.GetKeyDown (KeyCode.Space)) 
+		if (Input.GetMouseButtonDown (0))
 		{
 			GenerateMap ();
 		}
@@ -53,7 +54,7 @@ public class MapGenerator : MonoBehaviour {
 
 	private void GenerateMap() 
 	{
-		map = new int [width,height];
+		map = new int [width, height];
 
 		RandomFillMap ();
 
@@ -64,10 +65,121 @@ public class MapGenerator : MonoBehaviour {
 
 		ProcessMap ();
 
+		InitialiseContourMap ();
+		FindLocalMaximumDistFromWall ();
+
 		AddBorderToMap ();
 
 		MeshGenerator meshGen = GetComponent<MeshGenerator> ();
 		meshGen.GenerateMesh (borderedMap, 1);
+	}
+
+	private void InitialiseContourMap ()
+	{
+		contourMap = new int [width, height];
+
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				if (map [x, y] == 1)
+				{
+					contourMap [x, y] = 0;
+				}
+				else
+				{
+					contourMap [x, y] = -1;
+				}
+			}
+		}
+	}
+
+	private void FindLocalMaximumDistFromWall ()
+	{
+		int currentContourValue = 0;
+
+		while (!ContourMapComplete ())
+		{
+			int [,] contourMapLocal = new int [width, height];
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					contourMapLocal [x, y] = contourMap [x, y];
+				}
+			}
+
+
+			int [,] contourMapFlags = new int [width, height];
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					for (int neighbourX = x - 1; neighbourX <= x + 1; neighbourX++)
+					{
+						for (int neighbourY = y - 1; neighbourY <= y + 1; neighbourY++)
+						{
+							if (neighbourX == x || neighbourY == y)
+							{
+								if (IsInMapRange (neighbourX, neighbourY) && contourMapFlags [x, y] != 1)
+								{
+									if (contourMap [neighbourX, neighbourY] == currentContourValue && contourMapLocal [x, y] == -1)
+									{
+										contourMapLocal [x, y] = currentContourValue + 1;
+										contourMapFlags [x, y] = 1;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					contourMap [x, y] = contourMapLocal [x, y];
+				}
+			}
+
+			currentContourValue++;
+		}
+
+		GameObject quadHolder = new GameObject ();
+		quadHolder.name = "quadHolder";
+
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				GameObject newQuad = GameObject.CreatePrimitive (PrimitiveType.Quad);
+				newQuad.transform.position = new Vector3 (x, y, 0f);
+				float greyScale = (float) contourMap [x, y] / 20f;
+				Color quadColor = new Color (greyScale, greyScale, greyScale, 1f);
+				MeshRenderer ren = newQuad.GetComponent<MeshRenderer> ();
+				ren.material = new Material (Shader.Find ("Unlit/Color"));
+				ren.material.color = quadColor;
+				newQuad.transform.parent = quadHolder.transform;
+				newQuad.name = x + "-" + y + " : Contour - " + contourMap [x, y];
+			}
+		}
+		quadHolder.transform.position = new Vector3 (-width / 2f, -height / 2f, 0f);
+	}
+
+	private bool ContourMapComplete ()
+	{
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				if (contourMap [x, y] == -1)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private void AddBorderToMap ()
